@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/sibms/static/css/main.9dd98ab1.css",
+    "main.js": "/sibms/static/js/main.4d4122d5.js",
+    "static/js/787.28cb0dcd.chunk.js": "/sibms/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/sibms/index.html",
+    "main.9dd98ab1.css.map": "/sibms/static/css/main.9dd98ab1.css.map",
+    "main.4d4122d5.js.map": "/sibms/static/js/main.4d4122d5.js.map",
+    "787.28cb0dcd.chunk.js.map": "/sibms/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9dd98ab1.css",
+    "static/js/main.4d4122d5.js"
+  ]
+}
