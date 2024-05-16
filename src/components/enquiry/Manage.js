@@ -21,7 +21,7 @@ function EnquiryManage() {
   const navigate = useNavigate();
 
   const [enquiries, setEnquiries] = useState();
-  const [enquiry, setEnquiry] = useState();
+  const [enquiry, setEnquiry] = useState({});
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -119,10 +119,10 @@ function EnquiryManage() {
               flexDirection="column"
               alignItems="left"
             >
-              <span>Name : {enquiry.name}</span>
-              <span>Company : {enquiry.cname}</span>
-              <span>Email : {enquiry.email}</span>
-              <span>Phone Number : {enquiry.phone}</span>
+              <span>Name : {enquiry?.name}</span>
+              <span>Company : {enquiry?.cname}</span>
+              <span>Email : {enquiry?.email}</span>
+              <span>Phone Number : {enquiry?.phone}</span>
             </Box>
             <Box
               display="flex"
