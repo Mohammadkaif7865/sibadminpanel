@@ -38,6 +38,7 @@ function BlogAdd() {
       category_id: "",
       name: "",
       slug: "",
+      image_name: "",
       image_alt: "",
       bdate: "",
       meta_title: "",
@@ -77,6 +78,7 @@ function BlogAdd() {
       formData.append('name', inputs.name);
       formData.append('slug', inputs.slug);
       formData.append('image_alt', inputs.image_alt);
+      formData.append('image_name', inputs.image_name);
       formData.append('description', description);
       formData.append('bdate', inputs.bdate);
       formData.append('meta_title', inputs.meta_title);
@@ -142,6 +144,11 @@ function BlogAdd() {
                   <div className="mb-3">
                     <label className="form-label">Image</label>
                     <input type="file" className="form-control" required onChange={handleFileChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Image Name</label>
+                    <input type="text" className="form-control" name="image_name" onChange={handleInputChange}
+                    value={inputs.image_name} />
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Image Alt</label>

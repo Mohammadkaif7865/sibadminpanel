@@ -41,7 +41,8 @@ function Dashboard() {
         </Helmet>
         <h4 className="fw-bold py-3 mb-4"><span className="text-muted fw-light"></span> Dashboard</h4>
 
-        <div className="row row-flex">
+
+        <div className="row row-flex  padding_card">
 
         {adminInfo[0].can_access.split(',').includes('CategoryManage') &&
           <div className="col-md-4 col-sm-6 col-xs-12">
