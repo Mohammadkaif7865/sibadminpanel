@@ -1,21 +1,29 @@
 .row-flex {
   display: flex;
   flex-wrap: wrap;
+  /* gap: 20px; */
+}
+.padding_card >* {
+  padding-top: calc(var(--bs-gutter-x) * 0.5);
+  padding-bottom: calc(var(--bs-gutter-x) * 0.5);
+}
+.card {
+  padding: 20px;
 }
 
 .view_single .single_box {
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 .view_single .single_box .title {
-    font-size: 120%;
-    font-weight: 700;
+  font-size: 120%;
+  font-weight: 700;
 }
 
 .view_single .single_box:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
