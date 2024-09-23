@@ -32,6 +32,10 @@ import UserEdit from './components/user/Edit';
 
 import { Route, Routes, useLocation } from "react-router-dom";
 
+
+
+
+
 function App(props) {
 
   const location = useLocation();
@@ -42,6 +46,7 @@ function App(props) {
         <ToastContainer position="bottom-center" limit={1} />
         <Routes>
           <Route path = "/" element = { <Login /> }/>
+       
 
           <Route path= "/dashboard" element={ <AuthGuard componentName="Dashboard" component={<Dashboard />} />} />
 
