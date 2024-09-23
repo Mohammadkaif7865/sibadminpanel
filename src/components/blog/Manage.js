@@ -18,7 +18,8 @@ function BlogManage() {
   const { adminInfo } = state;
   const navigate = useNavigate();
 
-  const [blogs, setBlogs] = useState();
+  const [blogs, setBlogs] = useState([]);
+  const [keyword, setKeyword] = useState("");
 
   const headers = {
     "Content-Type": "application/json",
@@ -67,6 +68,11 @@ function BlogManage() {
     }
   };
 
+  const filteredBlogs = blogs.filter((blog) =>
+      blog.name.toLowerCase().includes(keyword.toLowerCase()) ||
+      blog.description.toLowerCase().includes(keyword.toLowerCase())
+  );
+
   return (
     <Layout>
       <Helmet>
@@ -80,11 +86,25 @@ function BlogManage() {
           </h4>
         </div>
         <div className="col-md-6" style={{ "text-align": "right" }}>
-          {adminInfo[0].can_access.split(",").includes("BlogAdd") && (
-            <Link to="/blog/add" className="btn btn-primary">
-              Add
-            </Link>
-          )}
+          <div className="d-flex align-items-center justify-content-end">
+            <div className="d-inline-block me-3">
+              <input
+                className="form-control  w-100"
+                type="text"
+                placeholder="Search"
+                name="keyword"
+                id="keyword"
+                onChange={(e) => {
+                  setKeyword(e.target.value);
+                }}
+              />
+            </div>
+            {adminInfo[0].can_access.split(",").includes("BlogAdd") && (
+              <Link to="/blog/add" className="btn btn-primary">
+                Add
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
@@ -103,7 +123,7 @@ function BlogManage() {
             </thead>
             <tbody className="table-border-bottom-0">
               {blogs &&
-                blogs.map((blog, index) => (
+                filteredBlogs.map((blog, index) => (
                   <tr key={blog.id}>
                     <td>
                       <div className="dropdown">
@@ -153,7 +173,9 @@ function BlogManage() {
                         src={BACKEND_URL + blog.image}
                       />
                     </td>
-                    <td className="text-nowrap">{format(new Date(blog.bdate), "yyyy-MM-dd")}</td>
+                    <td className="text-nowrap">
+                      {format(new Date(blog.bdate), "yyyy-MM-dd")}
+                    </td>
                     <td>{blog.publish == 1 ? <>Yes</> : <>No</>}</td>
                   </tr>
                 ))}

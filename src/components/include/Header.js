@@ -1,121 +1,125 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Store } from '../../Store';
+import { Store } from "../../Store";
 
 function Header() {
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { adminInfo } = state;
+  const navigate = useNavigate();
 
-    const { state, dispatch: ctxDispatch } = useContext(Store);
-    const { adminInfo } = state;
-    const navigate = useNavigate();
+  useEffect(() => {
+    if (!adminInfo) {
+      navigate("/");
+    }
+  }, [navigate, adminInfo]);
 
-    useEffect(() => {
-      if (!adminInfo) {
-        navigate("/");
-      }
-    }, [navigate, adminInfo]);
+  const [isActives, setActives] = useState({
+    categories: false,
+    services: false,
+    enquiries: false,
+    careers: false,
+  });
 
-    const [isActives, setActives] = useState({
-      categories: false,
-      services: false,
-      enquiries: false,
-      careers: false,
-    });
+  const toggleDropdown = (menu) => {
+    switch (menu) {
+      case "services":
+        setActives({ ...isActives, services: !isActives.services });
+        break;
+      case "blogs":
+        setActives({ ...isActives, blogs: !isActives.blogs });
+        break;
+      case "enquiries":
+        setActives({ ...isActives, enquiries: !isActives.enquiries });
+        break;
+      case "careers":
+        setActives({ ...isActives, careers: !isActives.careers });
+        break;
+      case "categories":
+        setActives({ ...isActives, categories: !isActives.categories });
+        break;
+      default:
+        setActives(isActives);
+    }
+  };
 
-    const toggleDropdown = (menu) => {
+  return (
+    <aside
+      id="layout-menu"
+      className="layout-menu menu-vertical menu bg-menu-theme"
+    >
+      <div className="app-brand demo">
+        <Link to="/dashboard" className="app-brand-link">
+          <span className="app-brand-logo demo">
+            <img src="images/logo.png" class="img-fluid rounded-top" alt="" />
+          </span>
+          {/* <span className="app-brand-text demo menu-text fw-bolder ms-2">SIB Infotech</span> */}
+        </Link>
 
-      switch (menu) {
-        case 'services':
-         setActives({...isActives, services: !isActives.services});
-          break;
-        case 'blogs':
-         setActives({...isActives, blogs: !isActives.blogs});
-          break;
-        case 'enquiries':
-         setActives({...isActives, enquiries: !isActives.enquiries});
-          break;
-        case 'careers':
-         setActives({...isActives, careers: !isActives.careers});
-          break;
-        case 'categories':
-         setActives({...isActives, categories: !isActives.categories});
-          break;
-        default:
-          setActives(isActives);
-      }
-    };
+        <a
+          href="#"
+          className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
+        >
+          <i className="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+      </div>
 
-    return (
-      <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
-        <div className="app-brand demo">
-          <Link to="/dashboard" className="app-brand-link" >
-            <span className="app-brand-logo demo">
+      <div className="menu-inner-shadow"></div>
+      <hr/>
 
-            </span>
-            <span className="app-brand-text demo menu-text fw-bolder ms-2">SIB Infotech</span>
+      <ul className="menu-inner py-1 mt-3">
+        <li className="menu-item">
+          <Link to="/dashboard" className="menu-link">
+            <i className="menu-icon tf-icons bx bx-home-circle"></i>
+            <div data-i18n="Analytics">Dashboard</div>
           </Link>
+        </li>
 
-          <a href="#" className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i className="bx bx-chevron-left bx-sm align-middle"></i>
-          </a>
-        </div>
-
-        <div className="menu-inner-shadow"></div>
-
-        <ul className="menu-inner py-1">
-
-          <li className="menu-item">
-            <Link to="/dashboard" className="menu-link">
-              <i className="menu-icon tf-icons bx bx-home-circle"></i>
-              <div data-i18n="Analytics">Dashboard</div>
-            </Link>
-          </li>
-
-          {adminInfo[0].can_access.split(',').includes('CategoryManage') &&
+        {adminInfo[0].can_access.split(",").includes("CategoryManage") && (
           <li className="menu-item">
             <Link to="/category" className="menu-link">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Categories">Categories</div>
             </Link>
           </li>
-          }
+        )}
 
-          {adminInfo[0].can_access.split(',').includes('BlogManage') &&
+        {adminInfo[0].can_access.split(",").includes("BlogManage") && (
           <li className="menu-item">
             <Link to="/blog" className="menu-link">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Blogs">Blogs</div>
             </Link>
           </li>
-          }
+        )}
 
-          {adminInfo[0].can_access.split(',').includes('EnquiryManage') &&
+        {adminInfo[0].can_access.split(",").includes("EnquiryManage") && (
           <li className="menu-item">
             <Link to="/enquiry" className="menu-link">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Enquiries">Enquiries</div>
             </Link>
           </li>
-          }
+        )}
 
-          {adminInfo[0].can_access.split(',').includes('CareerManage') &&
+        {adminInfo[0].can_access.split(",").includes("CareerManage") && (
           <li className="menu-item">
             <Link to="/career" className="menu-link">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Careers">Career Forms</div>
             </Link>
           </li>
-          }
+        )}
 
-          {adminInfo[0].can_access.split(',').includes('UserManage') &&
+        {adminInfo[0].can_access.split(",").includes("UserManage") && (
           <li className="menu-item">
             <Link to="/user" className="menu-link">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Users">Users</div>
             </Link>
           </li>
-          }
+        )}
 
-          {/*<li className={`menu-item ${ isActives.categories ? 'open' : '' }`} onClick={(e) => {e.preventDefault(); toggleDropdown('categories');}}>
+        {/*<li className={`menu-item ${ isActives.categories ? 'open' : '' }`} onClick={(e) => {e.preventDefault(); toggleDropdown('categories');}}>
             <a href="#" className="menu-link menu-toggle">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Categories">Categories</div>
@@ -155,7 +159,7 @@ function Header() {
             </ul>
           </li>*/}
 
-          {/*<li className={`menu-item ${ isActives.services ? 'open' : '' }`} onClick={(e) => {e.preventDefault(); toggleDropdown('services');}}>
+        {/*<li className={`menu-item ${ isActives.services ? 'open' : '' }`} onClick={(e) => {e.preventDefault(); toggleDropdown('services');}}>
             <a href="#" className="menu-link menu-toggle">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Services">Services</div>
@@ -175,7 +179,7 @@ function Header() {
             </ul>
           </li>*/}
 
-          {/*<li className={`menu-item ${ isActives.enquiries ? 'open' : '' }`} onClick={(e) => {e.preventDefault(); toggleDropdown('enquiries');}}>
+        {/*<li className={`menu-item ${ isActives.enquiries ? 'open' : '' }`} onClick={(e) => {e.preventDefault(); toggleDropdown('enquiries');}}>
             <a href="#" className="menu-link menu-toggle">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Enquiries">Enquiries</div>
@@ -204,11 +208,9 @@ function Header() {
               </li>
             </ul>
           </li>*/}
-
-        </ul>
-      </aside>
-
-    );
+      </ul>
+    </aside>
+  );
 }
 
 export default Header;
