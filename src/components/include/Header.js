@@ -50,7 +50,7 @@ function Header() {
       <div className="app-brand demo">
         <Link to="/dashboard" className="app-brand-link">
           <span className="app-brand-logo demo">
-            <img src="images/logo.png" class="img-fluid rounded-top" alt="" />
+            <img src="/sibms/images/logo.png" class="img-fluid rounded-top" alt="" />
           </span>
           {/* <span className="app-brand-text demo menu-text fw-bolder ms-2">SIB Infotech</span> */}
         </Link>
