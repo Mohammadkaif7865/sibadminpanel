@@ -101,19 +101,24 @@ function EnquiryManage() {
           aria-describedby="modal-description"
         >
           <Box sx={style}>
-          <Box
+            <Box
               display="flex"
               justifyContent="space-between"
               alignItems="center"
             >
-              <Typography id="modal-title" variant="h4" component="h2" marginBottom='10px'>
+              <Typography
+                id="modal-title"
+                variant="h4"
+                component="h2"
+                marginBottom="10px"
+              >
                 Enquiry Details
               </Typography>
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
             </Box>
-          <Box
+            <Box
               display="flex"
               justifyContent="space-between"
               flexDirection="column"
@@ -123,12 +128,13 @@ function EnquiryManage() {
               <span>Company : {enquiry?.cname}</span>
               <span>Email : {enquiry?.email}</span>
               <span>Phone Number : {enquiry?.phone}</span>
+              <span>Date : {enquiry?.createdAt}</span>
             </Box>
             <Box
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-              marginTop='10px'
+              marginTop="10px"
             >
               <Typography id="modal-title" variant="h6" component="h2">
                 Message
@@ -139,36 +145,37 @@ function EnquiryManage() {
             </Typography>
           </Box>
         </Modal>
-        <div className="table-responsive text-nowrap">
+        <div className="table-responsive ">
           <table className="table">
             <thead>
               <tr>
-                <th>Sr No.</th>
+                <th className="text-nowrap">Sr No.</th>
                 <th>Name</th>
-                <th>Company Name</th>
-                <th>Email</th>
                 <th>Phone</th>
+                <th>Email</th>
+                <th>Company Name</th>
                 {/* <th>Details</th> */}
-                <th>Created At</th>
-                <th>View Details</th>
+                {/* <th>Created At</th> */}
+                <th className="text-nowrap">View Details</th>
               </tr>
             </thead>
             <tbody className="table-border-bottom-0">
               {enquiries &&
                 enquiries.map((enquiry, index) => (
                   <tr key={enquiry.id}>
-                    {console.log("TTTTTTDFGFDGDFG", enquiry)}
                     <td>{enquiry.id}</td>
-                    <td>
+                    <td className="text-nowrap">
                       <strong>{enquiry.name}</strong>
                     </td>
-                    <td>
+                    <td>{enquiry.phone}</td>
+                    <td>{enquiry.email}</td>
+                    <td style={{
+                      maxWidth:"200px",
+                    }}>
                       <strong>{enquiry.cname}</strong>
                     </td>
-                    <td>{enquiry.email}</td>
-                    <td>{enquiry.phone}</td>
                     {/* <td>{enquiry.details}</td> */}
-                    <td>{format(new Date(enquiry.createdAt), "yyyy-MM-dd")}</td>
+                    {/* <td>{format(new Date(enquiry.createdAt), "yyyy-MM-dd")}</td> */}
                     <td>
                       {/* <div className="dropdown">
                       <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Store } from "../../Store";
@@ -14,6 +14,7 @@ import Layout from "../Layout";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import RichTextEditor from "../RichTextEditor";
 
 function BlogEdit() {
   const [categories, setCategories] = useState();
@@ -55,6 +56,7 @@ function BlogEdit() {
   const [selectedFile, setSelectedFile] = useState();
   const [description, setDescription] = useState();
   const [loaded, setLoaded] = useState(false);
+  const editorRef = useRef(null);
 
   const { id } = useParams();
 
@@ -83,10 +85,12 @@ function BlogEdit() {
       setDescription(data.blog[0].description);
     }
   };
+  
   useEffect(() => {
     getBlog();
     setLoaded(true);
   }, [navigate, id]);
+ 
 
   const handleInputChange = (e) => {
     setInputs((prevState) => ({
@@ -99,9 +103,7 @@ function BlogEdit() {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleDescriptionChange = (event, editor) => {
-    setDescription(editor.getData());
-  };
+
 
   const headers = {
     "Content-Type": "multipart/form-data",
@@ -136,6 +138,7 @@ function BlogEdit() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
     editBlog().then((data) => {
       if (!data.error) {
         toast.success(data.message);
@@ -150,6 +153,7 @@ function BlogEdit() {
     <Layout>
       <Helmet>
         <title>Blog Edit</title>
+       
       </Helmet>
       <h4 className="fw-bold py-3 mb-4">
         <span className="text-muted fw-light"></span> Blog Edit
@@ -237,10 +241,11 @@ function BlogEdit() {
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Description</label>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={description}
-                    onChange={handleDescriptionChange}
+                  <RichTextEditor
+                    initialValue={description}
+                    getValue={(value) => {
+                      setDescription(value);
+                    }}
                   />
                 </div>
                 <div className="mb-3">
