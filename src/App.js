@@ -20,7 +20,10 @@ import CategoryEdit from './components/category/Edit';
 import BlogManage from './components/blog/Manage';
 import BlogAdd from './components/blog/Add';
 import BlogEdit from './components/blog/Edit';
-
+// new service master UI
+import ServiceMasterManage from './components/service_master/Manage';
+import ServiceMasterAdd from './components/service_master/Add';
+import ServiceMasterEdit from './components/service_master/Edit'
 import EnquiryManage from './components/enquiry/Manage';
 
 import CareerManage from './components/career/Manage';
@@ -57,6 +60,10 @@ function App(props) {
           <Route path = "/category" element = { <AuthGuard componentName="CategoryManage" component={<CategoryManage />} /> }/>
           <Route path = "/category/add" element = { <AuthGuard componentName="CategoryAdd" component={<CategoryAdd />} /> }/>
           <Route path = "/category/edit/:id" element = { <AuthGuard componentName="CategoryEdit" component={<CategoryEdit />} /> }/>
+          {/* New UI routes for /service-master */}
+          <Route path="/service-master" element={<AuthGuard componentName="ServiceMasterManage" component={<ServiceMasterManage />} />} />
+          <Route path="/service-master/add" element={<AuthGuard componentName="ServiceMasterAdd" component={<ServiceMasterAdd />} />} />
+          <Route path="/service-master/edit/:id" element={<AuthGuard componentName="ServiceMasterEdit" component={<ServiceMasterEdit />} />} />
 
           <Route path = "/blog" element = { <AuthGuard componentName="BlogManage" component={<BlogManage />} /> }/>
           <Route path = "/blog/add" element = { <AuthGuard componentName="BlogAdd" component={<BlogAdd />} /> }/>

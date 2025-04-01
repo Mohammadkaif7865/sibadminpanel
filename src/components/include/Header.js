@@ -91,6 +91,14 @@ function Header() {
             </Link>
           </li>
         )}
+        {adminInfo[0].can_access.split(",").includes("CategoryManage") && (
+          <li className="menu-item">
+            <Link to="/service-master" className="menu-link">
+              <i className="menu-icon tf-icons bx bx-star"></i>
+              <div data-i18n="Service Mater">Services Master</div>
+            </Link>
+          </li>
+        )}
 
         {adminInfo[0].can_access.split(",").includes("EnquiryManage") && (
           <li className="menu-item">
