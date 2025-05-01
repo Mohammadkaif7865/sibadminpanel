@@ -108,6 +108,14 @@ function Header() {
             </Link>
           </li>
         )}
+        {adminInfo[0].can_access.split(",").includes("EnquiryManage") && (
+          <li className="menu-item">
+            <Link to="/enquiry-banner" className="menu-link">
+              <i className="menu-icon tf-icons bx bx-star"></i>
+              <div data-i18n="Enquiries">Enquiries Banner</div>
+            </Link>
+          </li>
+        )}
 
         {adminInfo[0].can_access.split(",").includes("CareerManage") && (
           <li className="menu-item">

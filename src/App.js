@@ -25,6 +25,7 @@ import ServiceMasterManage from './components/service_master/Manage';
 import ServiceMasterAdd from './components/service_master/Add';
 import ServiceMasterEdit from './components/service_master/Edit'
 import EnquiryManage from './components/enquiry/Manage';
+import EnquiryManageBanner from './components/enquiry_banner/Manage';
 
 import CareerManage from './components/career/Manage';
 import CareerView from './components/career/View';
@@ -70,6 +71,7 @@ function App(props) {
           <Route path = "/blog/edit/:id" element = { <AuthGuard componentName="BlogEdit" component={<BlogEdit />} /> }/>
 
           <Route path = "/enquiry" element = { <AuthGuard componentName="EnquiryManage" component={<EnquiryManage />} /> }/>
+          <Route path = "/enquiry-banner" element = { <AuthGuard componentName="EnquiryManage" component={<EnquiryManageBanner />} /> }/>
 
           <Route path = "/career" element = { <AuthGuard componentName="CareerManage" component={<CareerManage />} /> }/>
           <Route path = "/career/view/:id" element = { <AuthGuard componentName="CareerView" component={<CareerView />} /> }/>
