@@ -178,7 +178,7 @@ function EnquiryManage() {
                   <td style={{ maxWidth: "200px" }}>
                     <strong>{enquiry.cname}</strong>
                   </td>
-                  <td>{enquiry.createdAt}</td>
+                  <td>{enquiry.createdAt?.slice(0, 10)}</td>
                   <td>
                     <span
                       style={{ cursor: "pointer" }}

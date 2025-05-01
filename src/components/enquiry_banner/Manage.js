@@ -185,7 +185,7 @@ function EnquiryManage() {
                   <td>{enquiry.phone}</td>
                   <td>{enquiry.email}</td>
                   <td>{enquiry.cname}</td>
-                  <td>{enquiry.createdAt}</td>
+                  <td>{enquiry.createdAt?.slice(0, 10)}</td>
                   <td>
                     <span
                       style={{ cursor: "pointer" }}
