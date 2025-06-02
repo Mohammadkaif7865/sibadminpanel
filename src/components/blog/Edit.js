@@ -9,6 +9,7 @@ import { Store } from "../../Store"
 import { format } from "date-fns"
 
 import * as constants from "../../Constants"
+import { extractYouTubeId } from "../helpers/functions";
 
 import Layout from "../Layout"
 import RichTextEditor from "../RichTextEditor"
@@ -160,18 +161,42 @@ function BlogEdit() {
   }
 
   // Handle section changes
-  const handleSectionChange = (index, field, value) => {
-    const newSections = [...sections]
-    newSections[index][field] = value
-    setSections(newSections)
-  }
+  const handleSectionChange = (index, name, value) => {
+    const newSections = [...sections];
+
+    // Special case for media_type
+    if (name === "media_type") {
+      newSections[index][name] = value;
+
+      // Reset media based on selected type
+      if (value === "none") {
+        newSections[index].media = null;
+      } else if (value === "youtube") {
+        newSections[index].media = "";
+      } else {
+        // For image or video, reset media if it's a string (previous URL)
+        if (typeof newSections[index].media === "string") {
+          newSections[index].media = null;
+        }
+      }
+    } else {
+      newSections[index][name] = value;
+    }
+
+    setSections(newSections);
+  };
+
 
   const handleSectionMediaChange = (index, e) => {
     const file = e.target.files[0]
     const newSections = [...sections]
-    newSections[index].media = file
+
+    if (file) {
+      newSections[index].media = file
+    }
     setSections(newSections)
   }
+
 
   // Add new section
   const addSection = () => {
@@ -316,13 +341,15 @@ function BlogEdit() {
         sections.map((section) => ({
           title: section.title,
           media_type: section.media_type,
+          media: typeof section.media === "string" ? section.media : "", // crucial!
           description: section.description,
           grey_quote: section.grey_quote,
           order: section.order,
           publish: section.publish,
-        })),
-      ),
-    )
+        }))
+      )
+    );
+
 
     // Add section media files separately
     sections.forEach((section, index) => {
@@ -674,44 +701,109 @@ function BlogEdit() {
                           </div>
 
                           <div className="mb-3">
-                            <label className="form-label">Media Type</label>
-                            <select
-                              className="form-control"
-                              value={section.media_type}
-                              onChange={(e) => handleSectionChange(index, "media_type", e.target.value)}
-                            >
-                              <option value="none">None</option>
-                              <option value="image">Image</option>
-                              <option value="video">Video</option>
-                            </select>
-                          </div>
-
-                          {section.media_type !== "none" && (
-                            <div className="mb-3">
-                              <label className="form-label">{section.media_type === "image" ? "Image" : "Video"}</label>
-                              <input
-                                type="file"
+                              <label className="form-label">Media Type</label>
+                              <select
                                 className="form-control"
-                                onChange={(e) => handleSectionMediaChange(index, e)}
-                              />
-                              {section.media && !section.media.name && (
-                                <img
-                                  src={BACKEND_URL + section.media || "/placeholder.svg"}
-                                  alt="Preview"
-                                  className="mt-2"
-                                  style={{ maxHeight: "100px" }}
-                                />
-                              )}
-                              {section.media && section.media instanceof File && section.media_type === "image" && (
-                                <img
-                                  src={URL.createObjectURL(section.media) || "/placeholder.svg"}
-                                  alt="Preview"
-                                  className="mt-2"
-                                  style={{ maxHeight: "100px" }}
-                                />
-                              )}
+                                name="media_type"
+                                value={section.media_type}
+                                onChange={(e) => handleSectionChange(index, e.target.name, e.target.value)}
+                              >
+                                <option value="none">None</option>
+                                <option value="image">Image</option>
+                                <option value="video">Video</option>
+                                <option value="youtube">YouTube</option>
+                              </select>
                             </div>
-                          )}
+
+                            {/* Image Upload */}
+                            {section.media_type === "image" && (
+                              <div className="mb-3">
+                                <label className="form-label">Image</label>
+                                <input
+                                  type="file"
+                                  name="media"
+                                  className="form-control"
+                                  accept="image/*"
+                                  onChange={(e) => handleSectionMediaChange(index, e)}
+                                />
+
+                                {/* Preview existing uploaded image */}
+                                {section.media && typeof section.media === "string" && (
+                                  <img
+                                    src={BACKEND_URL + section.media}
+                                    alt="Image Preview"
+                                    className="mt-2"
+                                    style={{ maxHeight: "100px" }}
+                                  />
+                                )}
+
+                                {/* Preview newly selected image */}
+                                {section.media && section.media instanceof File && (
+                                  <img
+                                    src={URL.createObjectURL(section.media)}
+                                    alt="New Image Preview"
+                                    className="mt-2"
+                                    style={{ maxHeight: "100px" }}
+                                  />
+                                )}
+                              </div>
+                            )}
+
+                            {/* Video Upload */}
+                            {section.media_type === "video" && (
+                              <div className="mb-3">
+                                <label className="form-label">Video</label>
+                                <input
+                                  type="file"
+                                  name="media"
+                                  className="form-control"
+                                  accept="video/*"
+                                  onChange={(e) => handleSectionMediaChange(index, e)}
+                                />
+
+                                {/* Preview existing uploaded video */}
+                                {section.media && typeof section.media === "string" && (
+                                  <video
+                                    className="mt-2"
+                                    style={{ maxHeight: "200px", width: "300px" }}
+                                    controls
+                                  >
+                                    <source src={BACKEND_URL + section.media} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                  </video>
+                                )}
+                              </div>
+                            )}
+
+                            {/* YouTube Link Input */}
+                            {section.media_type === "youtube" && (
+                              <div className="mb-3">
+                                <label className="form-label">YouTube Share URL</label>
+                                <input
+                                  type="text"
+                                  name="media"
+                                  className="form-control"
+                                  placeholder="e.g. https://youtu.be/xyz123"
+                                  value={section.media || ""}
+                                  onChange={(e) => handleSectionChange(index, e.target.name, e.target.value)}
+                                />
+
+                                {/* YouTube Preview */}
+                                {section.media && extractYouTubeId(section.media) && (
+                                  <div className="mt-2">
+                                    <iframe
+                                      width="300"
+                                      height="200"
+                                      src={`https://www.youtube.com/embed/${extractYouTubeId(section.media)}`}
+                                      title="YouTube video preview"
+                                      frameBorder="0"
+                                      allowFullScreen
+                                    ></iframe>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
 
                           <div className="mb-3">
                             <label className="form-label">Content</label>
