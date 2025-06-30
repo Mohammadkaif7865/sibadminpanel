@@ -49,7 +49,16 @@ function BlogEdit() {
     meta_keywords: "",
     meta_description: "",
     publish: 1,
-  })
+    action_title: "",
+    action_btn_1_text: "",
+    action_btn_1_link: "",
+    action_btn_2_text: "",
+    action_btn_2_link: "",
+    action_subtitle_1: "",
+    action_description_1: "",
+    action_subtitle_2: "",
+    action_description_2: "",
+  });
 
   // File uploads
   const [bannerFile, setBannerFile] = useState()
@@ -62,10 +71,14 @@ function BlogEdit() {
       media_type: "none",
       description: "",
       grey_quote: "",
+      grey_quote_bg_color: "",
+      grey_quote_border_color: "",
+      section_bg_color: "",
+      section_border_color: "",
       order: 0,
       publish: 1,
     },
-  ])
+  ]);
 
   // FAQs (repeater)
   const [faqs, setFaqs] = useState([
@@ -116,6 +129,16 @@ function BlogEdit() {
           banner_text_color: data.blog[0].banner_text_color || "#000000",
           banner_title: data.blog[0].banner_title || "",
           banner_image: data.blog[0].banner_image || null,
+          // Action fields
+          action_title: data.blog[0].action_title || "",
+          action_btn_1_text: data.blog[0].action_btn_1_text || "",
+          action_btn_1_link: data.blog[0].action_btn_1_link || "",
+          action_btn_2_text: data.blog[0].action_btn_2_text || "",
+          action_btn_2_link: data.blog[0].action_btn_2_link || "",
+          action_subtitle_1: data.blog[0].action_subtitle_1 || "",
+          action_description_1: data.blog[0].action_description_1 || "",
+          action_subtitle_2: data.blog[0].action_subtitle_2 || "",
+          action_description_2: data.blog[0].action_description_2 || "",
         });
   
         setDescription(data.blog[0].description);
@@ -208,9 +231,13 @@ function BlogEdit() {
         media_type: "none",
         description: "",
         grey_quote: "",
+        grey_quote_bg_color: "",
+        grey_quote_border_color: "",
+        section_bg_color: "",
+        section_border_color: "",
         order: sections.length,
         publish: 1,
-      },
+      }
     ])
   }
 
@@ -321,7 +348,16 @@ function BlogEdit() {
     formData.append("image_alt", inputs.image_alt)
     formData.append("description", description)
     formData.append("bdate", inputs.bdate)
-    formData.append("meta_title", inputs.meta_title)
+    formData.append("meta_title", inputs.meta_title);
+    formData.append("action_title", inputs.action_title);
+    formData.append("action_btn_1_text", inputs.action_btn_1_text);
+    formData.append("action_btn_1_link", inputs.action_btn_1_link);
+    formData.append("action_btn_2_text", inputs.action_btn_2_text);
+    formData.append("action_btn_2_link", inputs.action_btn_2_link);
+    formData.append("action_subtitle_1", inputs.action_subtitle_1);
+    formData.append("action_description_1", inputs.action_description_1);
+    formData.append("action_subtitle_2", inputs.action_subtitle_2);
+    formData.append("action_description_2", inputs.action_description_2);
     formData.append("meta_keywords", inputs.meta_keywords)
     formData.append("meta_description", inputs.meta_description)
     formData.append("publish", inputs.publish)
@@ -344,6 +380,10 @@ function BlogEdit() {
           media: typeof section.media === "string" ? section.media : "", // crucial!
           description: section.description,
           grey_quote: section.grey_quote,
+          grey_quote_bg_color: section.grey_quote_bg_color,
+          grey_quote_border_color: section.grey_quote_border_color,
+          section_bg_color: section.section_bg_color,
+          section_border_color: section.section_border_color,
           order: section.order,
           publish: section.publish,
         }))
@@ -432,6 +472,15 @@ function BlogEdit() {
             </li>
             <li className="nav-item">
               <a
+                className={`nav-link ${activeTab === "action" ? "active" : ""}`}
+                href="#"
+                onClick={() => setActiveTab("action")}
+              >
+                Action
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
                 className={`nav-link ${activeTab === "seo" ? "active" : ""}`}
                 href="#"
                 onClick={() => setActiveTab("seo")}
@@ -439,6 +488,7 @@ function BlogEdit() {
                 SEO
               </a>
             </li>
+
           </ul>
         </div>
       </div>
@@ -815,13 +865,90 @@ function BlogEdit() {
 
                           <div className="mb-3">
                             <label className="form-label">Grey Quote (Optional)</label>
-                            <textarea
-                              className="form-control"
-                              value={section.grey_quote}
-                              onChange={(e) => handleSectionChange(index, "grey_quote", e.target.value)}
-                              rows="3"
-                            ></textarea>
+                            <RichTextEditor
+                              initialValue={section.grey_quote}
+                              getValue={(value) => handleSectionChange(index, "grey_quote", value)}
+                            />
                           </div>
+
+
+                          <div className="row">
+                              <div className="col-md-6 mb-3">
+                                <label className="form-label">Grey Quote Background Color</label>
+                                <div className="d-flex align-items-center">
+                                  <input
+                                    type="color"
+                                    className="form-control form-control-color me-2"
+                                    value={section.grey_quote_bg_color}
+                                    onChange={(e) => handleSectionChange(index, "grey_quote_bg_color", e.target.value)}
+                                  />
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={section.grey_quote_bg_color}
+                                    onChange={(e) => handleSectionChange(index, "grey_quote_bg_color", e.target.value)}
+                                    placeholder="#ffffff"
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-6 mb-3">
+                                <label className="form-label">Grey Quote Border Color</label>
+                                <div className="d-flex align-items-center">
+                                  <input
+                                    type="color"
+                                    className="form-control form-control-color me-2"
+                                    value={section.grey_quote_border_color}
+                                    onChange={(e) => handleSectionChange(index, "grey_quote_border_color", e.target.value)}
+                                  />
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={section.grey_quote_border_color}
+                                    onChange={(e) => handleSectionChange(index, "grey_quote_border_color", e.target.value)}
+                                    placeholder="#cccccc"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="row">
+                              <div className="col-md-6 mb-3">
+                                <label className="form-label">Section Background Color</label>
+                                <div className="d-flex align-items-center">
+                                  <input
+                                    type="color"
+                                    className="form-control form-control-color me-2"
+                                    value={section.section_bg_color}
+                                    onChange={(e) => handleSectionChange(index, "section_bg_color", e.target.value)}
+                                  />
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={section.section_bg_color}
+                                    onChange={(e) => handleSectionChange(index, "section_bg_color", e.target.value)}
+                                    placeholder="#f9f9f9"
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-6 mb-3">
+                                <label className="form-label">Section Border Color</label>
+                                <div className="d-flex align-items-center">
+                                  <input
+                                    type="color"
+                                    className="form-control form-control-color me-2"
+                                    value={section.section_border_color}
+                                    onChange={(e) => handleSectionChange(index, "section_border_color", e.target.value)}
+                                  />
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={section.section_border_color}
+                                    onChange={(e) => handleSectionChange(index, "section_border_color", e.target.value)}
+                                    placeholder="#dddddd"
+                                  />
+                                </div>
+                              </div>
+                            </div>
 
                           <div className="mb-3">
                             <label className="form-label">Publish</label>
@@ -923,6 +1050,115 @@ function BlogEdit() {
                     </div>
                   </>
                 )}
+
+
+                {/* Action Tab Content */}
+                {activeTab === "action" && (
+                  <>
+                    <div className="alert alert-info">Configure call-to-action content and buttons.</div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Action Title</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="action_title"
+                        onChange={handleInputChange}
+                        value={inputs.action_title}
+                      />
+                    </div>
+
+                    <div className="row">
+                      <div className="col-md-6 mb-3">
+                        <label className="form-label">Button 1 Text</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="action_btn_1_text"
+                          onChange={handleInputChange}
+                          value={inputs.action_btn_1_text}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label className="form-label">Button 1 Link</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="action_btn_1_link"
+                          onChange={handleInputChange}
+                          value={inputs.action_btn_1_link}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-md-6 mb-3">
+                        <label className="form-label">Button 2 Text</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="action_btn_2_text"
+                          onChange={handleInputChange}
+                          value={inputs.action_btn_2_text}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-3">
+                        <label className="form-label">Button 2 Link</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="action_btn_2_link"
+                          onChange={handleInputChange}
+                          value={inputs.action_btn_2_link}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Action Subtitle 1</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="action_subtitle_1"
+                        onChange={handleInputChange}
+                        value={inputs.action_subtitle_1}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Action Description 1</label>
+                      <RichTextEditor
+                        initialValue={inputs.action_description_1}
+                        getValue={(value) => {
+                          setInputs((prev) => ({ ...prev, action_description_1: value }));
+                        }}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Action Subtitle 2</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="action_subtitle_2"
+                        onChange={handleInputChange}
+                        value={inputs.action_subtitle_2}
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Action Description 2</label>
+                      <RichTextEditor
+                        initialValue={inputs.action_description_2}
+                        getValue={(value) => {
+                          setInputs((prev) => ({ ...prev, action_description_2: value }));
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+
+
 
                 {/* SEO Tab Content */}
                 {activeTab === "seo" && (
