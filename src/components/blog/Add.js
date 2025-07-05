@@ -57,6 +57,7 @@ function BlogAdd() {
   const [sections, setSections] = useState([
     {
       title: "",
+      section_link_title: "",
       media: null,
       media_type: "none",
       description: "",
@@ -149,6 +150,7 @@ function BlogAdd() {
       ...sections,
       {
         title: "",
+        section_link_title: "",
         media: null,
         media_type: "none",
         description: "",
@@ -295,6 +297,7 @@ function BlogAdd() {
       // Step 1: Prepare sections data
       const sectionsData = sections.map((section) => ({
         title: section.title,
+        section_link_title: section.section_link_title,
         media_type: section.media_type,
         media: section.media_type === "youtube" ? section.media : "", // Only send media string for YouTube
         description: section.description,
@@ -674,6 +677,16 @@ function BlogAdd() {
                               className="form-control"
                               value={section.title}
                               onChange={(e) => handleSectionChange(index, "title", e.target.value)}
+                            />
+                          </div>
+
+                          <div className="mb-3">
+                            <label className="form-label">Section Link Title</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={section.section_link_title}
+                              onChange={(e) => handleSectionChange(index, "section_link_title", e.target.value)}
                             />
                           </div>
 

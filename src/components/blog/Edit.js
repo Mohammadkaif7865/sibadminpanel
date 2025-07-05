@@ -67,6 +67,7 @@ function BlogEdit() {
   const [sections, setSections] = useState([
     {
       title: "",
+      section_link_title: "",
       media: null,
       media_type: "none",
       description: "",
@@ -227,6 +228,7 @@ function BlogEdit() {
       ...sections,
       {
         title: "",
+        section_link_title: "",
         media: null,
         media_type: "none",
         description: "",
@@ -376,6 +378,7 @@ function BlogEdit() {
       JSON.stringify(
         sections.map((section) => ({
           title: section.title,
+          section_link_title: section.section_link_title,
           media_type: section.media_type,
           media: typeof section.media === "string" ? section.media : "", // crucial!
           description: section.description,
@@ -747,6 +750,16 @@ function BlogEdit() {
                               className="form-control"
                               value={section.title}
                               onChange={(e) => handleSectionChange(index, "title", e.target.value)}
+                            />
+                          </div>
+
+                          <div className="mb-3">
+                            <label className="form-label">Section Link Title</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={section.section_link_title}
+                              onChange={(e) => handleSectionChange(index, "section_link_title", e.target.value)}
                             />
                           </div>
 
