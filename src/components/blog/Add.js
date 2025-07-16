@@ -14,6 +14,7 @@ import RichTextEditor from "../RichTextEditor.js"
 
 function BlogAdd() {
   const [categories, setCategories] = useState()
+  const [authors, setAuthors] = useState()
   const { state, dispatch: ctxDispatch } = useContext(Store)
   const { adminInfo } = state
   const navigate = useNavigate()
@@ -22,6 +23,7 @@ function BlogAdd() {
   // Main blog data
   const [inputs, setInputs] = useState({
     category_id: "",
+    author_id: "",
     name: "",
     slug: "",
     image_name: "",
@@ -104,8 +106,25 @@ function BlogAdd() {
     }
   }
 
+
+  const getAuthors = async () => {
+    const res = await axios
+      .get(`${API_URL}author/all`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: API_TOKEN,
+        },
+      })
+      .catch((err) => console.log(err))
+    const data = await res.data
+    if (data.authors) {
+      setAuthors(data.authors)
+    }
+  }
+
   useEffect(() => {
     getCategories()
+    getAuthors()
   }, [])
 
   const handleInputChange = (e) => {
@@ -265,6 +284,7 @@ function BlogAdd() {
         formData.append("image", selectedFile)
       }
       formData.append("category_id", inputs.category_id)
+      formData.append("author_id", inputs.author_id)
       formData.append("name", inputs.name)
       formData.append("slug", inputs.slug)
       formData.append("image_name", inputs.image_name)
@@ -344,7 +364,7 @@ function BlogAdd() {
     e.preventDefault()
 
     // Validate required fields
-    if (!inputs.name || !inputs.category_id || !selectedFile || !inputs.bdate) {
+    if (!inputs.name || !inputs.category_id || !inputs.author_id || !selectedFile || !inputs.bdate) {
       toast.error("Please fill all required fields")
       return
     }
@@ -479,6 +499,26 @@ function BlogAdd() {
                           ))}
                       </select>
                     </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Author</label>
+                      <select
+                        className="form-control"
+                        name="author_id"
+                        value={inputs.author_id}
+                        onChange={handleInputChange}
+                        required
+                      >
+                        <option value="">Select</option>
+                        {authors &&
+                          authors.map((author, index) => (
+                            <option key={author.id} value={author.id}>
+                              {author.name}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+
                     <div className="mb-3">
                       <label className="form-label">Image</label>
                       <input type="file" className="form-control" required onChange={handleFileChange} />

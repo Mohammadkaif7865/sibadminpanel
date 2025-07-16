@@ -15,6 +15,7 @@ function Header() {
 
   const [isActives, setActives] = useState({
     categories: false,
+    authors: false,
     services: false,
     enquiries: false,
     careers: false,
@@ -36,6 +37,9 @@ function Header() {
         break;
       case "categories":
         setActives({ ...isActives, categories: !isActives.categories });
+        break;
+      case "authors":
+        setActives({ ...isActives, authors: !isActives.authors });
         break;
       default:
         setActives(isActives);
@@ -79,6 +83,15 @@ function Header() {
             <Link to="/category" className="menu-link">
               <i className="menu-icon tf-icons bx bx-star"></i>
               <div data-i18n="Categories">Categories</div>
+            </Link>
+          </li>
+        )}
+        
+        {adminInfo[0].can_access.split(",").includes("AuthorManage") && (
+          <li className="menu-item">
+            <Link to="/author" className="menu-link">
+              <i className="menu-icon tf-icons bx bx-user"></i>
+              <div data-i18n="Authors">Authors</div>
             </Link>
           </li>
         )}

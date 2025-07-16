@@ -116,6 +116,7 @@ function BlogManage() {
                 <th>Actions</th>
                 <th style={{ width: "400px" }}>Name</th>
                 <th>Category</th>
+                <th>Author</th>
                 <th>Image</th>
                 <th>Date</th>
                 <th>Publish</th>
@@ -167,6 +168,7 @@ function BlogManage() {
                       <strong>{blog.name}</strong>
                     </td>
                     <td>{blog.category_name}</td>
+                    <td>{blog.author_name}</td>
                     <td>
                       <img
                         style={{ width: "100px" }}

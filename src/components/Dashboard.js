@@ -53,6 +53,17 @@ function Dashboard() {
           </div>
         }
 
+
+        {adminInfo[0].can_access.split(',').includes('AuthorManage') &&
+          <div className="col-md-4 col-sm-6 col-xs-12">
+            <div className="card">
+              <p className="card-title">Authors</p>
+              <p className="card-count">{dashboardCount && dashboardCount.author}</p>
+            </div>
+          </div>
+        }
+
+
         {adminInfo[0].can_access.split(',').includes('BlogManage') &&
           <div className="col-md-4 col-sm-6 col-xs-12">
             <div className="card">
