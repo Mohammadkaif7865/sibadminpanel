@@ -27,7 +27,41 @@
 .App-link {
   color: #61dafb;
 }
+.Toastify__toast-container {
+  width: 360px !important;
+  z-index: 999999 !important;
+}
 
+.Toastify__toast {
+  min-height: 56px !important;
+  padding: 12px 14px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.Toastify__toast-body {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  flex: 1 !important;
+}
+
+.Toastify__toast-icon {
+  width: 22px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  margin-right: 10px !important;
+}
+
+.Toastify__toast-icon svg {
+  width: 22px !important;
+  height: 22px !important;
+  display: block !important;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
