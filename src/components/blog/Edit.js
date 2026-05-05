@@ -35,6 +35,7 @@ function BlogEdit() {
     meta_title: "",
     meta_keywords: "",
     meta_description: "",
+    schema_jsonld: "",
     publish: 1,
     action_title: "",
     action_btn_1_text: "",
@@ -153,6 +154,7 @@ function BlogEdit() {
           meta_title: data.blog[0].meta_title,
           meta_keywords: data.blog[0].meta_keywords,
           meta_description: data.blog[0].meta_description,
+          schema_jsonld: data.blog[0].schema_jsonld || "",
           publish: data.blog[0].publish,
           banner_background_color: data.blog[0].banner_background_color || "#ffffff",
           banner_text_color: data.blog[0].banner_text_color || "#000000",
@@ -318,7 +320,7 @@ function BlogEdit() {
   const moveSectionUp = (index) => {
     if (index === 0) return
     const newSections = [...sections]
-    ;[newSections[index - 1], newSections[index]] = [newSections[index], newSections[index - 1]]
+      ;[newSections[index - 1], newSections[index]] = [newSections[index], newSections[index - 1]]
     newSections.forEach((section, idx) => {
       section.order = idx
     })
@@ -329,7 +331,7 @@ function BlogEdit() {
   const moveSectionDown = (index) => {
     if (index === sections.length - 1) return
     const newSections = [...sections]
-    ;[newSections[index], newSections[index + 1]] = [newSections[index + 1], newSections[index]]
+      ;[newSections[index], newSections[index + 1]] = [newSections[index + 1], newSections[index]]
     newSections.forEach((section, idx) => {
       section.order = idx
     })
@@ -340,7 +342,7 @@ function BlogEdit() {
   const moveFaqUp = (index) => {
     if (index === 0) return
     const newFaqs = [...faqs]
-    ;[newFaqs[index - 1], newFaqs[index]] = [newFaqs[index], newFaqs[index - 1]]
+      ;[newFaqs[index - 1], newFaqs[index]] = [newFaqs[index], newFaqs[index - 1]]
     newFaqs.forEach((faq, idx) => {
       faq.order = idx
     })
@@ -351,7 +353,7 @@ function BlogEdit() {
   const moveFaqDown = (index) => {
     if (index === faqs.length - 1) return
     const newFaqs = [...faqs]
-    ;[newFaqs[index], newFaqs[index + 1]] = [newFaqs[index + 1], newFaqs[index]]
+      ;[newFaqs[index], newFaqs[index + 1]] = [newFaqs[index + 1], newFaqs[index]]
     newFaqs.forEach((faq, idx) => {
       faq.order = idx
     })
@@ -387,6 +389,7 @@ function BlogEdit() {
     formData.append("action_description_2", inputs.action_description_2)
     formData.append("meta_keywords", inputs.meta_keywords)
     formData.append("meta_description", inputs.meta_description)
+    formData.append("schema_jsonld", inputs.schema_jsonld)
     formData.append("publish", inputs.publish)
 
     // Banner data
@@ -1297,6 +1300,24 @@ function BlogEdit() {
                         value={inputs.meta_description}
                         rows="4"
                       ></textarea>
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Schema JSON-LD</label>
+                      <textarea
+                        className="form-control"
+                        name="schema_jsonld"
+                        onChange={handleInputChange}
+                        value={inputs.schema_jsonld}
+                        rows="8"
+                        placeholder={`{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Your blog title"
+}`}
+                      ></textarea>
+                      <small className="text-muted">
+                        Paste valid JSON-LD only. Do not include &lt;script&gt; tags unless your backend expects them.
+                      </small>
                     </div>
                   </>
                 )}

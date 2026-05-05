@@ -42,6 +42,7 @@ function BlogAdd() {
     meta_title: "",
     meta_keywords: "",
     meta_description: "",
+    schema_jsonld: "",
     publish: 1,
     // Banner fields
     banner_background_color: "#ffffff",
@@ -230,7 +231,7 @@ function BlogAdd() {
   const moveSectionUp = (index) => {
     if (index === 0) return
     const newSections = [...sections]
-    ;[newSections[index - 1], newSections[index]] = [newSections[index], newSections[index - 1]]
+      ;[newSections[index - 1], newSections[index]] = [newSections[index], newSections[index - 1]]
     // Update order values
     newSections.forEach((section, idx) => {
       section.order = idx
@@ -242,7 +243,7 @@ function BlogAdd() {
   const moveSectionDown = (index) => {
     if (index === sections.length - 1) return
     const newSections = [...sections]
-    ;[newSections[index], newSections[index + 1]] = [newSections[index + 1], newSections[index]]
+      ;[newSections[index], newSections[index + 1]] = [newSections[index + 1], newSections[index]]
     // Update order values
     newSections.forEach((section, idx) => {
       section.order = idx
@@ -254,7 +255,7 @@ function BlogAdd() {
   const moveFaqUp = (index) => {
     if (index === 0) return
     const newFaqs = [...faqs]
-    ;[newFaqs[index - 1], newFaqs[index]] = [newFaqs[index], newFaqs[index - 1]]
+      ;[newFaqs[index - 1], newFaqs[index]] = [newFaqs[index], newFaqs[index - 1]]
     // Update order values
     newFaqs.forEach((faq, idx) => {
       faq.order = idx
@@ -266,7 +267,7 @@ function BlogAdd() {
   const moveFaqDown = (index) => {
     if (index === faqs.length - 1) return
     const newFaqs = [...faqs]
-    ;[newFaqs[index], newFaqs[index + 1]] = [newFaqs[index + 1], newFaqs[index]]
+      ;[newFaqs[index], newFaqs[index + 1]] = [newFaqs[index + 1], newFaqs[index]]
     // Update order values
     newFaqs.forEach((faq, idx) => {
       faq.order = idx
@@ -304,6 +305,7 @@ function BlogAdd() {
       formData.append("meta_title", inputs.meta_title)
       formData.append("meta_keywords", inputs.meta_keywords)
       formData.append("meta_description", inputs.meta_description)
+      formData.append("schema_jsonld", inputs.schema_jsonld)
       formData.append("publish", inputs.publish)
 
       // Banner data
@@ -731,103 +733,103 @@ function BlogAdd() {
                           </div>
 
                           <div className="mb-3">
-                              <label className="form-label">Media Type</label>
-                              <select
+                            <label className="form-label">Media Type</label>
+                            <select
+                              className="form-control"
+                              value={section.media_type}
+                              onChange={(e) => handleSectionChange(index, "media_type", e.target.value)}
+                            >
+                              <option value="none">None</option>
+                              <option value="image">Image</option>
+                              <option value="video">Video</option>
+                              <option value="youtube">YouTube</option>
+                            </select>
+                          </div>
+
+                          {section.media_type === "image" && (
+                            <div className="mb-3">
+                              <label className="form-label">Image</label>
+                              <input
+                                type="file"
+                                name="media"
                                 className="form-control"
-                                value={section.media_type}
-                                onChange={(e) => handleSectionChange(index, "media_type", e.target.value)}
-                              >
-                                <option value="none">None</option>
-                                <option value="image">Image</option>
-                                <option value="video">Video</option>
-                                <option value="youtube">YouTube</option>
-                              </select>
+                                accept="image/*"
+                                onChange={(e) => handleSectionMediaChange(index, e)}
+                              />
+
+                              {/* Preview existing uploaded image */}
+                              {section.media && typeof section.media === "string" && (
+                                <img
+                                  src={BACKEND_URL + section.media}
+                                  alt="Preview"
+                                  className="mt-2"
+                                  style={{ maxHeight: "100px" }}
+                                />
+                              )}
+
+                              {/* Preview newly selected image */}
+                              {section.media && section.media instanceof File && (
+                                <img
+                                  src={URL.createObjectURL(section.media)}
+                                  alt="Preview"
+                                  className="mt-2"
+                                  style={{ maxHeight: "100px" }}
+                                />
+                              )}
                             </div>
+                          )}
 
-                            {section.media_type === "image" && (
-                              <div className="mb-3">
-                                <label className="form-label">Image</label>
-                                <input
-                                  type="file"
-                                  name="media"
-                                  className="form-control"
-                                  accept="image/*"
-                                  onChange={(e) => handleSectionMediaChange(index, e)}
-                                />
+                          {section.media_type === "video" && (
+                            <div className="mb-3">
+                              <label className="form-label">Video</label>
+                              <input
+                                type="file"
+                                name="media"
+                                className="form-control"
+                                accept="video/*"
+                                onChange={(e) => handleSectionMediaChange(index, e)}
+                              />
 
-                                {/* Preview existing uploaded image */}
-                                {section.media && typeof section.media === "string" && (
-                                  <img
-                                    src={BACKEND_URL + section.media}
-                                    alt="Preview"
-                                    className="mt-2"
-                                    style={{ maxHeight: "100px" }}
-                                  />
-                                )}
+                              {/* Optional: preview existing video */}
+                              {section.media && typeof section.media === "string" && (
+                                <video
+                                  className="mt-2"
+                                  style={{ maxHeight: "200px", width: "300" }}
+                                  controls
+                                >
+                                  <source src={BACKEND_URL + section.media} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
+                              )}
+                            </div>
+                          )}
 
-                                {/* Preview newly selected image */}
-                                {section.media && section.media instanceof File && (
-                                  <img
-                                    src={URL.createObjectURL(section.media)}
-                                    alt="Preview"
-                                    className="mt-2"
-                                    style={{ maxHeight: "100px" }}
-                                  />
-                                )}
-                              </div>
-                            )}
+                          {section.media_type === "youtube" && (
+                            <div className="mb-3">
+                              <label className="form-label">YouTube Share URL</label>
+                              <input
+                                type="text"
+                                name="media"
+                                className="form-control"
+                                placeholder="e.g. https://youtu.be/xyz123"
+                                value={section.media || ""}
+                                onChange={(e) => handleSectionChange(index, e.target.name, e.target.value)}
+                              />
 
-                            {section.media_type === "video" && (
-                              <div className="mb-3">
-                                <label className="form-label">Video</label>
-                                <input
-                                  type="file"
-                                  name="media"
-                                  className="form-control"
-                                  accept="video/*"
-                                  onChange={(e) => handleSectionMediaChange(index, e)}
-                                />
-
-                                {/* Optional: preview existing video */}
-                                {section.media && typeof section.media === "string" && (
-                                  <video
-                                    className="mt-2"
-                                    style={{ maxHeight: "200px", width: "300" }}
-                                    controls
-                                  >
-                                    <source src={BACKEND_URL + section.media} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                  </video>
-                                )}
-                              </div>
-                            )}
-
-                            {section.media_type === "youtube" && (
-                              <div className="mb-3">
-                                <label className="form-label">YouTube Share URL</label>
-                                <input
-                                  type="text"
-                                  name="media"
-                                  className="form-control"
-                                  placeholder="e.g. https://youtu.be/xyz123"
-                                  value={section.media || ""}
-                                  onChange={(e) => handleSectionChange(index, e.target.name, e.target.value)}
-                                />
-
-                                {section.media && extractYouTubeId(section.media) && (
-                                  <div className="mt-2">
-                                    <iframe
-                                      width="300"
-                                      height="200"
-                                      src={`https://www.youtube.com/embed/${extractYouTubeId(section.media)}`}
-                                      title="YouTube video preview"
-                                      frameBorder="0"
-                                      allowFullScreen
-                                    ></iframe>
-                                  </div>
-                                )}
-                              </div>
-                            )}
+                              {section.media && extractYouTubeId(section.media) && (
+                                <div className="mt-2">
+                                  <iframe
+                                    width="300"
+                                    height="200"
+                                    src={`https://www.youtube.com/embed/${extractYouTubeId(section.media)}`}
+                                    title="YouTube video preview"
+                                    frameBorder="0"
+                                    allowFullScreen
+                                  ></iframe>
+                                </div>
+                              )}
+                            </div>
+                          )}
 
 
                           <div className="mb-3">
@@ -847,82 +849,82 @@ function BlogAdd() {
                           </div>
 
                           <div className="row">
-                              <div className="col-md-6 mb-3">
-                                <label className="form-label">Grey Quote Background Color</label>
-                                <div className="d-flex align-items-center">
-                                  <input
-                                    type="color"
-                                    className="form-control form-control-color me-2"
-                                    value={section.grey_quote_bg_color}
-                                    onChange={(e) => handleSectionChange(index, "grey_quote_bg_color", e.target.value)}
-                                  />
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    value={section.grey_quote_bg_color}
-                                    onChange={(e) => handleSectionChange(index, "grey_quote_bg_color", e.target.value)}
-                                    placeholder="#ffffff"
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-md-6 mb-3">
-                                <label className="form-label">Grey Quote Border Color</label>
-                                <div className="d-flex align-items-center">
-                                  <input
-                                    type="color"
-                                    className="form-control form-control-color me-2"
-                                    value={section.grey_quote_border_color}
-                                    onChange={(e) => handleSectionChange(index, "grey_quote_border_color", e.target.value)}
-                                  />
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    value={section.grey_quote_border_color}
-                                    onChange={(e) => handleSectionChange(index, "grey_quote_border_color", e.target.value)}
-                                    placeholder="#cccccc"
-                                  />
-                                </div>
+                            <div className="col-md-6 mb-3">
+                              <label className="form-label">Grey Quote Background Color</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="color"
+                                  className="form-control form-control-color me-2"
+                                  value={section.grey_quote_bg_color}
+                                  onChange={(e) => handleSectionChange(index, "grey_quote_bg_color", e.target.value)}
+                                />
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  value={section.grey_quote_bg_color}
+                                  onChange={(e) => handleSectionChange(index, "grey_quote_bg_color", e.target.value)}
+                                  placeholder="#ffffff"
+                                />
                               </div>
                             </div>
+                            <div className="col-md-6 mb-3">
+                              <label className="form-label">Grey Quote Border Color</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="color"
+                                  className="form-control form-control-color me-2"
+                                  value={section.grey_quote_border_color}
+                                  onChange={(e) => handleSectionChange(index, "grey_quote_border_color", e.target.value)}
+                                />
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  value={section.grey_quote_border_color}
+                                  onChange={(e) => handleSectionChange(index, "grey_quote_border_color", e.target.value)}
+                                  placeholder="#cccccc"
+                                />
+                              </div>
+                            </div>
+                          </div>
 
-                            <div className="row">
-                              <div className="col-md-6 mb-3">
-                                <label className="form-label">Section Background Color</label>
-                                <div className="d-flex align-items-center">
-                                  <input
-                                    type="color"
-                                    className="form-control form-control-color me-2"
-                                    value={section.section_bg_color}
-                                    onChange={(e) => handleSectionChange(index, "section_bg_color", e.target.value)}
-                                  />
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    value={section.section_bg_color}
-                                    onChange={(e) => handleSectionChange(index, "section_bg_color", e.target.value)}
-                                    placeholder="#f9f9f9"
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-md-6 mb-3">
-                                <label className="form-label">Section Border Color</label>
-                                <div className="d-flex align-items-center">
-                                  <input
-                                    type="color"
-                                    className="form-control form-control-color me-2"
-                                    value={section.section_border_color}
-                                    onChange={(e) => handleSectionChange(index, "section_border_color", e.target.value)}
-                                  />
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    value={section.section_border_color}
-                                    onChange={(e) => handleSectionChange(index, "section_border_color", e.target.value)}
-                                    placeholder="#dddddd"
-                                  />
-                                </div>
+                          <div className="row">
+                            <div className="col-md-6 mb-3">
+                              <label className="form-label">Section Background Color</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="color"
+                                  className="form-control form-control-color me-2"
+                                  value={section.section_bg_color}
+                                  onChange={(e) => handleSectionChange(index, "section_bg_color", e.target.value)}
+                                />
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  value={section.section_bg_color}
+                                  onChange={(e) => handleSectionChange(index, "section_bg_color", e.target.value)}
+                                  placeholder="#f9f9f9"
+                                />
                               </div>
                             </div>
+                            <div className="col-md-6 mb-3">
+                              <label className="form-label">Section Border Color</label>
+                              <div className="d-flex align-items-center">
+                                <input
+                                  type="color"
+                                  className="form-control form-control-color me-2"
+                                  value={section.section_border_color}
+                                  onChange={(e) => handleSectionChange(index, "section_border_color", e.target.value)}
+                                />
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  value={section.section_border_color}
+                                  onChange={(e) => handleSectionChange(index, "section_border_color", e.target.value)}
+                                  placeholder="#dddddd"
+                                />
+                              </div>
+                            </div>
+                          </div>
 
 
                           <div className="mb-3">
@@ -1169,6 +1171,24 @@ function BlogAdd() {
                         value={inputs.meta_description}
                         rows="4"
                       ></textarea>
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Schema JSON-LD</label>
+                      <textarea
+                        className="form-control"
+                        name="schema_jsonld"
+                        onChange={handleInputChange}
+                        value={inputs.schema_jsonld}
+                        rows="8"
+                        placeholder={`{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Your blog title"
+}`}
+                      ></textarea>
+                      <small className="text-muted">
+                        Paste valid JSON-LD only. Do not include &lt;script&gt; tags unless your backend expects them.
+                      </small>
                     </div>
                   </>
                 )}
